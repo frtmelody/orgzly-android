@@ -18,6 +18,7 @@
     <string name="no_link">No Link</string>
     <string name="browse">Browse</string>
     <string name="dropbox">Dropbox</string>
+    <string name="webdav">WebDAV</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="name">Name</string>
@@ -152,6 +153,12 @@
     <string name="fragment_query_title">Search</string>
     <string name="repo_dropbox_button_not_linked">Link to Dropbox</string>
     <string name="repo_dropbox_button_linked">Unlink from Dropbox</string>
+
+    <!-- TODO: put this in other place? -->
+    <string name="repo_webdav_button_not_linked">Link to webDAV server</string>
+    <string name="repo_webdav_button_linked">Unlink from webDAV server</string>
+    <string name="fragment_repo_webdav_directory_desc">Directory in your server</string>
+
     <string name="fragment_settings_title">Settings</string>
 
     <string name="updating_notes">Updating notes…</string>
