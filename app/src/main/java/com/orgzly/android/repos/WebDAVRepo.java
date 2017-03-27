@@ -10,10 +10,11 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by rafa on 25/03/17.
+ * Created by @rafaelleru on 25/03/17.
  */
 
 public class WebDAVRepo implements Repo {
+    public static final String SCHEME = "webDAV";
 
     private final Uri repoUri;
     private final WebDAVClient client;
