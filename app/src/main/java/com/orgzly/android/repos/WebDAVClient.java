@@ -126,8 +126,14 @@ public class WebDAVClient {
 
     }
 
-    public VersionedRook move(Uri repoUri, Uri fromUri, Uri toUri) {
-        return null;
+    public VersionedRook move(Uri repoUri, Uri fromUri, Uri toUri) throws IOException {
+
+        client.move(fromUri.getPath(), toUri.getPath());
+
+        String rev = client.list(toUri.getPath()).get(0).getModified().toString();
+        long last_modified = client.list(toUri.getPath()).get(0).getModified().getTime();
+
+        return new VersionedRook(repoUri, toUri, rev, last_modified);
     }
 
     public void delete(String path) {
