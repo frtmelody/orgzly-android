@@ -3,6 +3,7 @@ package com.orgzly.android.repos;
 import android.content.Context;
 import android.net.Uri;
 
+import com.fasterxml.jackson.core.Versioned;
 import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;
@@ -45,8 +46,8 @@ public class WebDAVClient {
         return this.client == null;
     }
 
-    public List<Rook> getBooks(Uri repoUri) throws IOException {
-        List<Rook> list = new ArrayList<>();
+    public List<VersionedRook> getBooks(Uri repoUri) throws IOException {
+        List<VersionedRook> list = new ArrayList<>();
 
         try {
             String path = repoUri.getPath();
@@ -60,9 +61,13 @@ public class WebDAVClient {
                 // System.out.println(res); // calls the .toString() method.
                 if (BookName.isSupportedFormatFileName(res.getName())) {
                     Uri uri = repoUri.buildUpon().appendPath(res.getPath()).build();
-                    Rook book = new Rook(
+                    String rev = res.getModified().toString();
+                    long last_modified = res.getModified().getTime();
+                    VersionedRook book = new VersionedRook(
                             repoUri,
-                            uri
+                            uri,
+                            rev,
+                            last_modified
                     );
 
                     list.add(book);
