@@ -402,4 +402,7 @@
     <string name="separate_notes_with_new_line_never">Never</string>
     <string name="default_share_notebook" translatable="false">Inbox</string>
     <string name="share_notebook">Share notebook</string>
+
+    <string name="fragment_repo_webdav_username_desc">Username (opt)</string>
+    <string name="fragment_repo_webdav_password_desc">Password (opt)</string>
 </resources>
