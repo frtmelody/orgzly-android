@@ -26,6 +26,10 @@
                 android:id="@+id/repos_options_menu_item_new_external_storage_directory"
                 app:showAsAction="ifRoom"
                 android:title="@string/directory"/>
+            <item
+                android:id="@+id/repos_options_menu_item_new_webDAV"
+                app:showAsAction="ifRoom"
+                android:title="WebDAV"/>
         </menu>
     </item>
 </menu>
