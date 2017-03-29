@@ -20,6 +20,16 @@
         >
 
         <!-- TODO: Find new icon -->
+        <Button
+            android:id="@+id/fragment_repo_webdav_link_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/fragment_padding"
+            android:layout_marginLeft="@dimen/fragment_padding"
+            android:layout_marginRight="@dimen/fragment_padding"
+            android:layout_marginStart="@dimen/fragment_padding"
+            android:text="@string/repo_webdav_button_not_linked" />
+
         <ImageView
             android:id="@+id/fragment_repo_dropbox_icon"
             android:layout_width="wrap_content"
@@ -27,21 +37,11 @@
             android:src="?attr/oic_dropbox_not_linked"
             android:contentDescription="@string/webdav"/>
 
-        <Button
-            android:id="@+id/fragment_repo_webdav_link_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/fragment_padding"
-            android:layout_marginRight="@dimen/fragment_padding"
-            android:layout_marginStart="@dimen/fragment_padding"
-            android:layout_marginLeft="@dimen/fragment_padding"
-            android:text="@string/repo_webdav_button_not_linked"/>
-
     </LinearLayout>
 
     <!-- Input. -->
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/fragment_repo_dropbox_directory_input_layout"
+        android:id="@+id/fragment_repo_webdav_directory_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/fragment_padding"
@@ -56,5 +56,42 @@
             android:imeOptions="actionDone"
             android:hint="@string/fragment_repo_webdav_directory_desc"/>
     </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/fragment_repo_webdav_username_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:errorEnabled="true">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/fragment_repo_webdav_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:hint="@string/fragment_repo_webdav_username_desc"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/fragment_repo_webdav_password_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:errorEnabled="true">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/fragment_repo_webdav_passwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:hint="@string/fragment_repo_webdav_password_desc"/>
+    </android.support.design.widget.TextInputLayout>
+
+
+
 
 </LinearLayout>
