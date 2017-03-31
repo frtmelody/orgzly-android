@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.orgzly.BuildConfig;
@@ -226,6 +227,8 @@ public class ReposFragment extends ListFragment implements LoaderManager.LoaderC
                     mListener.onRepoNewRequest(item.getItemId());
                 }
                 return true;
+            case R.id.repos_options_menu_item_new_webDAV:
+                mListener.onRepoNewRequest(item.getItemId());
 
             default:
                 return super.onOptionsItemSelected(item);

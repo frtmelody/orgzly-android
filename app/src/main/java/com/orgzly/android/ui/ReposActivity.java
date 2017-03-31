@@ -1,5 +1,6 @@
 package com.orgzly.android.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -7,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.orgzly.BuildConfig;
 import com.orgzly.R;
@@ -22,6 +24,7 @@ import com.orgzly.android.repos.RepoFactory;
 import com.orgzly.android.ui.dialogs.SimpleOneLinerDialog;
 import com.orgzly.android.ui.fragments.DirectoryRepoFragment;
 import com.orgzly.android.ui.fragments.DropboxRepoFragment;
+import com.orgzly.android.ui.fragments.WebDAVRepoFragment;
 import com.orgzly.android.ui.fragments.browser.FileBrowserFragment;
 import com.orgzly.android.ui.fragments.ReposFragment;
 import com.orgzly.android.ui.util.ActivityUtils;
@@ -148,6 +151,16 @@ public class ReposActivity extends CommonActivity
         } else if (id == R.id.repos_options_menu_item_new_external_storage_directory) {
             displayRepoFragment(DirectoryRepoFragment.getInstance(), DirectoryRepoFragment.FRAGMENT_TAG);
 
+        } else if (id == R.id.repos_options_menu_item_new_webDAV) {
+            //TODO: webdab repo fragment
+
+            int duration = Toast.LENGTH_LONG;
+
+            Context context = this.getApplicationContext();
+            Toast toast = Toast.makeText(context, "new WebDAV", duration);
+            toast.show();
+
+            displayRepoFragment(WebDAVRepoFragment.getInstance(), WebDAVRepoFragment.FRAGMENT_TAG);
         } else {
             throw new IllegalArgumentException("Unknown repo menu item clicked: " + id);
         }
