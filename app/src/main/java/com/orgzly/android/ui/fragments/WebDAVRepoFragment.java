@@ -1,57 +1,62 @@
 package com.orgzly.android.ui.fragments;
 
-import android.app.ActionBar;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.support.annotation.StringRes;
+import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orgzly.BuildConfig;
 import com.orgzly.R;
+import com.orgzly.android.provider.clients.ReposClient;
 import com.orgzly.android.repos.Repo;
 import com.orgzly.android.repos.RepoFactory;
-import com.orgzly.android.repos.WebDAVRepo;
 import com.orgzly.android.ui.CommonActivity;
 import com.orgzly.android.ui.util.ActivityUtils;
 import com.orgzly.android.util.AppPermissions;
+import com.orgzly.android.util.LogUtils;
 import com.orgzly.android.util.MiscUtils;
 
-/**
- * Created by rafa on 29/03/17.
- */
 
 public class WebDAVRepoFragment extends RepoFragment {
-    private static final String TAG = WebDAVRepoFragment.class.getName();
+    private static final String TAG = DirectoryRepoFragment.class.getName();
 
     private static final String ARG_REPO_ID = "repo_id";
 
     /** Name used for {@link android.app.FragmentManager}. */
-    public static final String FRAGMENT_TAG = WebDAVRepoFragment.class.getName();
+    public static final String FRAGMENT_TAG = DirectoryRepoFragment.class.getName();
 
-    private WebDAVRepoFragmentListener mListener;
+    private WebDAVRepoRepoFragmentListener mListener;
 
-    private ImageView webDAVIcon;
-    private Button mWebDAVLinkUnlinkButton;
 
     private TextInputLayout directoryInputLayout;
-    private EditText mDirectory;
+    private EditText mUriView;
+    private EditText mUsernameView;
+    private EditText mUserPasswdView;
+    private Button linkWebDAVButton;
+
+    private String username;
+    private String password;
+    private Uri server_uri;
 
     public static WebDAVRepoFragment getInstance() {
         return new WebDAVRepoFragment();
     }
 
-    public static DirectoryRepoFragment getInstance(long repoId) {
-        DirectoryRepoFragment fragment = new DirectoryRepoFragment();
+    public static WebDAVRepoFragment getInstance(long repoId) {
+        WebDAVRepoFragment fragment = new WebDAVRepoFragment();
         Bundle args = new Bundle();
 
         args.putLong(ARG_REPO_ID, repoId);
@@ -78,55 +83,71 @@ public class WebDAVRepoFragment extends RepoFragment {
         setHasOptionsMenu(true);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_repo_webdav, container, false);
 
-        /* Dropbox link / unlink button. */
-        mWebDAVLinkUnlinkButton = (Button) view.findViewById(R.id.fragment_repo_dropbox_link_button);
-        mWebDAVLinkUnlinkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener.isWebDAVLinked()) {
-                    //areYouSureYouWantToUnlink();
-                } else {
-                    //toogleLink();
-                }
-            }
-        });
-
-        webDAVIcon = (ImageView) view.findViewById(R.id.fragment_repo_dropbox_icon);
-
-        mDirectory = (EditText) view.findViewById(R.id.fragment_repo_dropbox_directory);
+        directoryInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_repo_webdav_directory_input_layout);
+        mUriView = (EditText) view.findViewById(R.id.fragment_repo_webdav_directory);
+        mUsernameView = (EditText) view.findViewById(R.id.fragment_repo_webdav_username);
+        mUserPasswdView = (EditText) view.findViewById(R.id.fragment_repo_webdav_passwd);
+        linkWebDAVButton = (Button) view.findViewById(R.id.fragment_repo_webdav_link_button);
 
         // Not working when done in XML
-        mDirectory.setHorizontallyScrolling(false);
-        mDirectory.setMaxLines(3);
+        mUriView.setHorizontallyScrolling(false);
+        mUriView.setMaxLines(3);
 
-        mDirectory.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mUriView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                //save();
+                save();
                 return true;
             }
         });
 
-        //setDirectoryFromArgument();
-
-        directoryInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_repo_dropbox_directory_input_layout);
-
-        MiscUtils.clearErrorOnTextChange(mDirectory, directoryInputLayout);
-
-        /* Open a soft keyboard. */
-        if (getActivity() != null) {
-            ActivityUtils.openSoftKeyboard(getActivity(), mDirectory);
-        }
-
         return view;
     }
 
-    public interface WebDAVRepoFragmentListener extends RepoFragmentListener {
-        boolean onWebDAVLinkToggleRequest();
-        boolean isWebDAVLinked();
+    private void save() {
+        String path = mUriView.getText().toString().trim();
+    }
+
+    /**
+     * Callback for options menu.
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (BuildConfig.LOG_DEBUG) LogUtils.d(TAG, menu, inflater);
+
+        inflater.inflate(R.menu.done_or_close, menu);
+
+        /* Remove search item. */
+        // menu.removeItem(R.id.options_menu_item_search);
+    }
+
+    /**
+     * Callback for options menu.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.close:
+                if (mListener != null) {
+                    mListener.onRepoCancelRequest();
+                }
+                return true;
+
+            case R.id.done:
+                save();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public interface WebDAVRepoRepoFragmentListener extends RepoFragmentListener {
+        public boolean isLinked();
     }
 }
