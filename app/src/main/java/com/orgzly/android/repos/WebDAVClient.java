@@ -30,7 +30,7 @@ public class WebDAVClient {
     private static final String TAG = WebDAVClient.class.getName();
     private static final long UPLOAD_FILE_SIZE_LIMIT = 150; // MB
 
-    private static final String NOT_LINKED = "Not linked to Dropbox";
+    private static final String NOT_LINKED = "Not linked to WevDAV";
     private static final String LARGE_FILE = "File larger then " + UPLOAD_FILE_SIZE_LIMIT + " MB";
 
     private Context context;
