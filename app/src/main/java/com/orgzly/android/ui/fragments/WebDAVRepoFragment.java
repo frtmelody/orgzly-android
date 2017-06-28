@@ -17,17 +17,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.orgzly.BuildConfig;
 import com.orgzly.R;
 import com.orgzly.android.provider.clients.ReposClient;
 import com.orgzly.android.repos.Repo;
 import com.orgzly.android.repos.RepoFactory;
+import com.orgzly.android.repos.WebDAVRepo;
 import com.orgzly.android.ui.CommonActivity;
 import com.orgzly.android.ui.util.ActivityUtils;
 import com.orgzly.android.util.AppPermissions;
 import com.orgzly.android.util.LogUtils;
 import com.orgzly.android.util.MiscUtils;
+import com.orgzly.android.util.UriUtils;
 
 
 public class WebDAVRepoFragment extends RepoFragment {
@@ -83,6 +86,25 @@ public class WebDAVRepoFragment extends RepoFragment {
         setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        /* This makes sure that the container activity has implemented
+         * the callback interface. If not, it throws an exception
+         */
+        try {
+            mListener = (WebDAVRepoRepoFragmentListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " must implement " + WebDAVRepoRepoFragmentListener.class);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,7 +132,36 @@ public class WebDAVRepoFragment extends RepoFragment {
     }
 
     private void save() {
-        String path = mUriView.getText().toString().trim();
+
+        String directory = mUriView.getText().toString();
+        String username = mUsernameView.getText().toString();
+        String pssw = mUserPasswdView.getText().toString();
+
+        if (TextUtils.isEmpty(directory)) {
+            directoryInputLayout.setError(getString(R.string.can_not_be_empty));
+            return;
+        } else {
+            directoryInputLayout.setError(null);
+        }
+
+        Uri uri = Uri.parse(directory + "/remote.php/dav/files/");
+
+        if (!TextUtils.isEmpty(username)) {
+            uri = Uri.parse(uri.toString() + username);
+        }
+
+        int duration = Toast.LENGTH_SHORT;
+
+        Context context = this.getContext();
+        Toast toast = Toast.makeText(context, uri.toString(), duration);
+        toast.show();
+
+        Repo repo = RepoFactory.getFromUri(getActivity(), uri);
+        if (mListener != null){
+            mListener.onRepoCreateRequest(repo);
+        }
+
+
     }
 
     /**
@@ -148,6 +199,6 @@ public class WebDAVRepoFragment extends RepoFragment {
     }
 
     public interface WebDAVRepoRepoFragmentListener extends RepoFragmentListener {
-        public boolean isLinked();
+        boolean isLinked();
     }
 }
