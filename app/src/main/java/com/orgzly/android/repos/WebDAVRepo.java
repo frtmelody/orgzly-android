@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 public class WebDAVRepo implements Repo {
-    public static final String SCHEME = "webDAV";
+    public static final String SCHEME = "nextcloud/remote.php/dav/";
 
     private final Uri repoUri;
     private final WebDAVClient client;
