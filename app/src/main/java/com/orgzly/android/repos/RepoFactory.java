@@ -33,6 +33,9 @@ public class RepoFactory {
 
                     case MockRepo.SCHEME:
                         return new MockRepo(context, uriString);
+
+                    case WebDAVRepo.SCHEME:
+                        return new WebDAVRepo(context, uri);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
