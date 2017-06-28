@@ -21,6 +21,7 @@ import com.orgzly.android.repos.DropboxRepo;
 import com.orgzly.android.repos.MockRepo;
 import com.orgzly.android.repos.Repo;
 import com.orgzly.android.repos.RepoFactory;
+import com.orgzly.android.repos.WebDAVClient;
 import com.orgzly.android.ui.dialogs.SimpleOneLinerDialog;
 import com.orgzly.android.ui.fragments.DirectoryRepoFragment;
 import com.orgzly.android.ui.fragments.DropboxRepoFragment;
@@ -42,6 +43,7 @@ public class ReposActivity extends CommonActivity
         DropboxRepoFragment.DropboxRepoFragmentListener,
         DirectoryRepoFragment.DirectoryRepoFragmentListener,
         FileBrowserFragment.BrowserFragmentListener,
+        WebDAVRepoFragment.WebDAVRepoRepoFragmentListener,
         ReposFragment.ReposFragmentListener {
 
     public static final String TAG = ReposActivity.class.getName();
@@ -55,6 +57,7 @@ public class ReposActivity extends CommonActivity
     private Shelf mShelf;
 
     private DropboxClient mDropboxClient;
+    private WebDAVClient mWebDAVClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,7 @@ public class ReposActivity extends CommonActivity
 
         mShelf = new Shelf(getApplicationContext());
         mDropboxClient = new DropboxClient(getApplicationContext());
+        mWebDAVClient = new WebDAVClient(getApplicationContext());
 
 
         /* onOptionsItemSelected() (android.R.id.home) gets called on press. */
@@ -88,6 +92,7 @@ public class ReposActivity extends CommonActivity
         super.onResume();
 
         dropboxCompleteAuthentication();
+        // TODO: look here maybe add autetificatioin to webDAV
 
         ActivityUtils.setColorsForFragment(this, ReposFragment.FRAGMENT_TAG);
     }
@@ -152,15 +157,8 @@ public class ReposActivity extends CommonActivity
             displayRepoFragment(DirectoryRepoFragment.getInstance(), DirectoryRepoFragment.FRAGMENT_TAG);
 
         } else if (id == R.id.repos_options_menu_item_new_webDAV) {
-            //TODO: webdab repo fragment
-
-            int duration = Toast.LENGTH_LONG;
-
-            Context context = this.getApplicationContext();
-            Toast toast = Toast.makeText(context, "new WebDAV", duration);
-            toast.show();
-
             displayRepoFragment(WebDAVRepoFragment.getInstance(), WebDAVRepoFragment.FRAGMENT_TAG);
+
         } else {
             throw new IllegalArgumentException("Unknown repo menu item clicked: " + id);
         }
@@ -329,5 +327,10 @@ public class ReposActivity extends CommonActivity
 
                 break;
         }
+    }
+
+    @Override
+    public boolean isLinked() {
+        return true;
     }
 }
