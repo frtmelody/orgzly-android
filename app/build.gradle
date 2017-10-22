@@ -6,6 +6,19 @@ android {
         javaMaxHeapSize "2g"
     }
 
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
+
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
@@ -86,7 +99,8 @@ configurations.all {
 
 dependencies {
     compile orgJavaLocation()
-
+    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+    //compile "cz.msebera.android:httpclient:4.4.1.2"
     compile "com.dropbox.core:dropbox-core-sdk:$dropbox_core_sdk_version"
 
     compile "com.googlecode.juniversalchardet:juniversalchardet:$juniversalchardet_version"
@@ -98,6 +112,8 @@ dependencies {
     compile "com.evernote:android-job:$evernote_android_job_version"
 
     compile "joda-time:joda-time:$joda_time_version"
+
+    compile "com.github.lookfirst:sardine:5.7"
 
     compile "com.android.support:support-v4:$android_support_version"
     compile "com.android.support:appcompat-v7:$android_support_version"

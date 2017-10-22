@@ -27,6 +27,8 @@ import com.orgzly.android.ui.fragments.ReposFragment;
 import com.orgzly.android.ui.util.ActivityUtils;
 import com.orgzly.android.util.LogUtils;
 import com.orgzly.android.util.UriUtils;
+import com.orgzly.android.repos.WebDAVClient;
+import com.orgzly.android.ui.fragments.WebDAVRepoFragment;
 
 import java.io.File;
 
@@ -39,6 +41,7 @@ public class ReposActivity extends CommonActivity
         DropboxRepoFragment.DropboxRepoFragmentListener,
         DirectoryRepoFragment.DirectoryRepoFragmentListener,
         FileBrowserFragment.BrowserFragmentListener,
+        WebDAVRepoFragment.WebDAVRepoRepoFragmentListener,
         ReposFragment.ReposFragmentListener {
 
     public static final String TAG = ReposActivity.class.getName();
@@ -53,6 +56,8 @@ public class ReposActivity extends CommonActivity
 
     private DropboxClient mDropboxClient;
 
+    private WebDAVClient mWebDAVClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +66,8 @@ public class ReposActivity extends CommonActivity
 
         mShelf = new Shelf(getApplicationContext());
         mDropboxClient = new DropboxClient(getApplicationContext());
+
+        mWebDAVClient = new WebDAVClient(getApplicationContext());
 
 
         /* onOptionsItemSelected() (android.R.id.home) gets called on press. */
@@ -147,7 +154,8 @@ public class ReposActivity extends CommonActivity
 
         } else if (id == R.id.repos_options_menu_item_new_external_storage_directory) {
             displayRepoFragment(DirectoryRepoFragment.getInstance(), DirectoryRepoFragment.FRAGMENT_TAG);
-
+        }else if (id == R.id.repos_options_menu_item_new_webdav) {
+            displayRepoFragment(WebDAVRepoFragment.getInstance(), WebDAVRepoFragment.FRAGMENT_TAG);
         } else {
             throw new IllegalArgumentException("Unknown repo menu item clicked: " + id);
         }
@@ -225,6 +233,11 @@ public class ReposActivity extends CommonActivity
     @Override
     public boolean isDropboxLinked() {
         return mDropboxClient.isLinked();
+    }
+
+    @Override
+    public boolean isWebDAVLinked() {
+        return mWebDAVClient.isLinked();
     }
 
     @Override

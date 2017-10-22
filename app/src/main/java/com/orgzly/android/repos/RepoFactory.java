@@ -29,6 +29,9 @@ public class RepoFactory {
                     case DirectoryRepo.SCHEME:
                         return new DirectoryRepo(uriString, false);
 
+                    case WebDAVRepo.SCHEME:
+                        return new WebDAVRepo(context, uri);
+
                     case MockRepo.SCHEME:
                         return new MockRepo(context, uriString);
                 }
